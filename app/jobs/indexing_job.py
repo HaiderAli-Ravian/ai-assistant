@@ -5,7 +5,8 @@ from uuid import UUID
 from sqlalchemy import select
 
 from app.db.session import AsyncSessionLocal
-from app.models.document import Document, DocumentStatus
+from app.models.document import Document
+from app.models.enums import DocumentStatus
 from app.services.indexing_service import index_document
 
 logger = logging.getLogger(__name__)

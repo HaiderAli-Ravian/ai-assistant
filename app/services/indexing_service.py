@@ -44,6 +44,7 @@ def index_document(document: Document) -> None:
 
         for node in nodes:
             node.metadata["document_id"] = str(document.id)
+            node.metadata["business_id"] = str(document.business_id)
             node.metadata["filename"] = document.filename
             node.metadata["cloudinary_url"] = document.cloudinary_url
 
