@@ -1,10 +1,15 @@
 from llama_index.core import StorageContext, VectorStoreIndex
+from llama_index.core.vector_stores import MetadataFilter, MetadataFilters
 
 from app.services.embedding_service import get_embedding_model
 from app.services.vector_store_service import get_vector_store
 
 
-def search_documents(query: str, top_k: int = 5) -> list[dict]:
+def search_documents(
+    query: str,
+    top_k: int = 5,
+    business_id: str | None = None,
+) -> list[dict]:
     """Search indexed document chunks from the vector store."""
 
     vector_store = get_vector_store(collection_name="documents")
@@ -19,8 +24,21 @@ def search_documents(query: str, top_k: int = 5) -> list[dict]:
         embed_model=get_embedding_model(),
     )
 
+    filters = None
+
+    if business_id:
+        filters = MetadataFilters(
+            filters=[
+                MetadataFilter(
+                    key="business_id",
+                    value=business_id,
+                )
+            ]
+        )
+
     retriever = index.as_retriever(
         similarity_top_k=top_k,
+        filters=filters,
     )
 
     nodes = retriever.retrieve(query)
